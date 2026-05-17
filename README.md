@@ -43,10 +43,12 @@ You can also skip the prompt:
 
 Install targets:
 
-| Platform | Skill path |
+| Platform | Install path |
 |---|---|
-| Claude Code | `~/.claude/skills/agent-council` |
+| Claude Code | `~/.claude/plugins/cache/agent-council/agent-council/<version>` |
 | Codex | `~/.codex/skills/agent-council` |
+
+For active Claude Code sessions, run `/reload-plugins` after installing or updating.
 
 ## Usage
 
@@ -59,7 +61,6 @@ Use agent-council for this decision: should we migrate this service to microserv
 You can also run the scripts directly from the installed skill:
 
 ```bash
-bash ~/.claude/skills/agent-council/scripts/run-council.sh --council tech "Should we migrate our monolith to microservices?"
 bash ~/.codex/skills/agent-council/scripts/run-council.sh --council career "How should I answer why I am leaving my current job?"
 ```
 
@@ -76,7 +77,7 @@ If you omit `--council`, the skill classifies the question automatically.
 
 ## Platform Notes
 
-The Claude Code skill uses the `claude` CLI and installs to `~/.claude/skills/agent-council`.
+The Claude Code install is a plugin install. It enables `agent-council@agent-council` in `~/.claude/settings.json`, adds the marketplace under `~/.claude/plugins/marketplaces/agent-council`, and installs the versioned plugin cache under `~/.claude/plugins/cache/agent-council/agent-council/<version>`.
 
 The Codex skill uses the `codex` CLI and installs to `~/.codex/skills/agent-council`.
 
@@ -90,11 +91,10 @@ For Claude Code plugin installs, this repo includes a `UserPromptSubmit` hook th
 https://raw.githubusercontent.com/putchi/agent-council/main/.claude-plugin/marketplace.json
 ```
 
-When a newer version is published, Claude Code will show an update prompt. Manual installs can be updated with:
+When a newer version is published, Claude Code will show an update prompt. Installs can be updated with:
 
 ```bash
-git pull
-./install.sh
+curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform both
 ```
 
 ## Repository Layout
@@ -104,7 +104,7 @@ git pull
 ├── .claude-plugin/          # Claude Code plugin and marketplace metadata
 ├── hooks/                   # Claude Code update hook
 ├── skills/
-│   ├── agent-council        # Claude plugin and Claude Code installer source
+│   ├── agent-council        # Claude plugin skill source
 │   └── codex/agent-council  # Codex installer source
 ├── install.sh               # Interactive installer
 └── README.md
@@ -113,9 +113,9 @@ git pull
 ## Requirements
 
 - Bash
-- `claude` CLI authenticated for Claude Code installs
 - `codex` CLI authenticated for Codex installs
-- `python3` and `curl` for the Claude Code update hook
+- `python3` for Claude plugin metadata installation
+- `curl` for remote installation and the Claude Code update hook
 
 ## License
 
