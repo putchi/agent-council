@@ -102,8 +102,7 @@ git pull
 ├── .claude-plugin/          # Claude Code plugin and marketplace metadata
 ├── hooks/                   # Claude Code update hook
 ├── skills/
-│   ├── agent-council        # Claude plugin-compatible skill location
-│   ├── claude/agent-council # Claude Code installer source
+│   ├── agent-council        # Claude plugin and Claude Code installer source
 │   └── codex/agent-council  # Codex installer source
 ├── install.sh               # Interactive installer
 └── README.md

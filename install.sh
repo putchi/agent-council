@@ -121,7 +121,7 @@ fi
 
 case "$PLATFORM" in
   claude)
-    SOURCE_DIR="$ROOT_DIR/skills/claude/agent-council"
+    SOURCE_DIR="$ROOT_DIR/skills/agent-council"
     TARGET_DIR="$HOME/.claude/skills/agent-council"
     ;;
   codex)
