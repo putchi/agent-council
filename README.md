@@ -17,6 +17,7 @@ You can also skip the platform prompt:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform claude
 curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform codex
+curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform both
 ```
 
 Clone the repo:
@@ -37,6 +38,7 @@ You can also skip the prompt:
 ```bash
 ./install.sh --platform claude
 ./install.sh --platform codex
+./install.sh --platform both
 ```
 
 Install targets:

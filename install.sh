@@ -64,12 +64,15 @@ Usage:
   ./install.sh
   ./install.sh --platform claude
   ./install.sh --platform codex
+  ./install.sh --platform both
   curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash
   curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform claude
+  curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform both
 
 Platforms:
   claude  Install to ~/.claude/skills/agent-council
   codex   Install to ~/.codex/skills/agent-council
+  both    Install both Claude Code and Codex skills
 EOF
 }
 
@@ -79,7 +82,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --platform)
       if [ $# -lt 2 ]; then
-        echo "Error: --platform requires claude or codex." >&2
+        echo "Error: --platform requires claude, codex, or both." >&2
         exit 1
       fi
       PLATFORM="$2"
@@ -105,59 +108,87 @@ if [ -z "$PLATFORM" ]; then
   echo "Install Agent Council for:"
   echo "  1) Claude Code (~/.claude/skills/agent-council)"
   echo "  2) Codex (~/.codex/skills/agent-council)"
-  if ! read_prompt CHOICE "Choose 1 or 2: "; then
-    echo "Error: --platform claude or --platform codex is required when no terminal is available." >&2
+  echo "  3) Both"
+  if ! read_prompt CHOICE "Choose 1, 2, or 3: "; then
+    echo "Error: --platform claude, --platform codex, or --platform both is required when no terminal is available." >&2
     exit 1
   fi
   case "$CHOICE" in
     1) PLATFORM="claude" ;;
     2) PLATFORM="codex" ;;
+    3) PLATFORM="both" ;;
     *)
-      echo "Error: choose 1 or 2." >&2
+      echo "Error: choose 1, 2, or 3." >&2
       exit 1
       ;;
   esac
 fi
 
-case "$PLATFORM" in
+install_platform() {
+  local platform="$1"
+  local on_decline="${2:-cancel}"
+  local source_dir=""
+  local target_dir=""
+
+  case "$platform" in
   claude)
-    SOURCE_DIR="$ROOT_DIR/skills/agent-council"
-    TARGET_DIR="$HOME/.claude/skills/agent-council"
+    source_dir="$ROOT_DIR/skills/agent-council"
+    target_dir="$HOME/.claude/skills/agent-council"
     ;;
   codex)
-    SOURCE_DIR="$ROOT_DIR/skills/codex/agent-council"
-    TARGET_DIR="$HOME/.codex/skills/agent-council"
+    source_dir="$ROOT_DIR/skills/codex/agent-council"
+    target_dir="$HOME/.codex/skills/agent-council"
     ;;
   *)
-    echo "Error: platform must be claude or codex." >&2
+    echo "Error: platform must be claude, codex, or both." >&2
+    exit 1
+    ;;
+  esac
+
+  if [ ! -d "$source_dir" ]; then
+    echo "Error: source skill not found: $source_dir" >&2
+    exit 1
+  fi
+
+  if [ -e "$target_dir" ]; then
+    if ! read_prompt CONFIRM "Replace existing install at $target_dir? [y/N] "; then
+      echo "Install cancelled."
+      exit 0
+    fi
+    case "$CONFIRM" in
+      y|Y|yes|YES) ;;
+      *)
+        if [ "$on_decline" = "skip" ]; then
+          echo "Skipped Agent Council for $platform:"
+          echo "  $target_dir"
+          return 0
+        fi
+        echo "Install cancelled."
+        exit 0
+        ;;
+    esac
+    rm -rf "$target_dir"
+  fi
+
+  mkdir -p "$(dirname "$target_dir")"
+  cp -R "$source_dir" "$target_dir"
+
+  find "$target_dir/scripts" -type f \( -name '*.sh' -o -name '*.js' \) -exec chmod +x {} \; 2>/dev/null || true
+
+  echo "Installed Agent Council for $platform:"
+  echo "  $target_dir"
+}
+
+case "$PLATFORM" in
+  claude|codex)
+    install_platform "$PLATFORM"
+    ;;
+  both)
+    install_platform claude skip
+    install_platform codex skip
+    ;;
+  *)
+    echo "Error: platform must be claude, codex, or both." >&2
     exit 1
     ;;
 esac
-
-if [ ! -d "$SOURCE_DIR" ]; then
-  echo "Error: source skill not found: $SOURCE_DIR" >&2
-  exit 1
-fi
-
-if [ -e "$TARGET_DIR" ]; then
-  if ! read_prompt CONFIRM "Replace existing install at $TARGET_DIR? [y/N] "; then
-    echo "Install cancelled."
-    exit 0
-  fi
-  case "$CONFIRM" in
-    y|Y|yes|YES) ;;
-    *)
-      echo "Install cancelled."
-      exit 0
-      ;;
-  esac
-  rm -rf "$TARGET_DIR"
-fi
-
-mkdir -p "$(dirname "$TARGET_DIR")"
-cp -R "$SOURCE_DIR" "$TARGET_DIR"
-
-find "$TARGET_DIR/scripts" -type f \( -name '*.sh' -o -name '*.js' \) -exec chmod +x {} \; 2>/dev/null || true
-
-echo "Installed Agent Council for $PLATFORM:"
-echo "  $TARGET_DIR"
