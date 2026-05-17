@@ -1,0 +1,8 @@
+{
+  "name": "agent-council",
+  "description": "Consult role-based AI councils for tech, career, business, and personal decisions, then get a Chairman synthesis",
+  "author": {
+    "name": "putchi"
+  },
+  "version": "1.0.0"
+}

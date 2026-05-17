@@ -1,0 +1,18 @@
+{
+  "name": "agent-council",
+  "description": "Single-plugin marketplace hosting the agent-council skill",
+  "owner": {
+    "name": "putchi",
+    "url": "https://github.com/putchi"
+  },
+  "plugins": [
+    {
+      "name": "agent-council",
+      "description": "Consult role-based AI councils for tech, career, business, and personal decisions, then get a Chairman synthesis",
+      "source": "./",
+      "version": "1.0.0",
+      "category": "productivity",
+      "tags": ["skills", "agents", "decision-making", "claude-code", "codex"]
+    }
+  ]
+}

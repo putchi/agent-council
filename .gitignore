@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+
+# Claude Code local project state
+.claude/
+
+# Local temp/log output
+tmp/
+*.log

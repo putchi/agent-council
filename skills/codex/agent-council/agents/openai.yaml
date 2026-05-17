@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Council"
+  short_description: "Consult expert Codex roles on hard decisions"
+  default_prompt: "Use $agent-council to consult the right council on this decision."
