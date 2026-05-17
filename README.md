@@ -6,6 +6,19 @@ This repository packages Agent Council for both Claude Code and Codex.
 
 ## Install
 
+Install directly from GitHub:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash
+```
+
+You can also skip the platform prompt:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform claude
+curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform codex
+```
+
 Clone the repo:
 
 ```bash
