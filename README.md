@@ -20,6 +20,13 @@ curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.s
 curl -fsSL https://raw.githubusercontent.com/putchi/agent-council/main/install.sh | bash -s -- --platform both
 ```
 
+Or, register the marketplace in Claude Code and install from there:
+
+```text
+/plugin marketplace add putchi/agent-council
+/plugin install agent-council@agent-council
+```
+
 Clone the repo:
 
 ```bash

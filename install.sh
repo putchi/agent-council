@@ -54,7 +54,7 @@ bootstrap_from_remote() {
   echo "Downloading Agent Council from ${repo}@${ref}..."
   curl -fsSL "$archive_url" | tar -xz -C "$tmp_dir" --strip-components=1
 
-  AGENT_COUNCIL_BOOTSTRAPPED=1 bash "$tmp_dir/install.sh" "${ORIGINAL_ARGS[@]}"
+  AGENT_COUNCIL_BOOTSTRAPPED=1 bash "$tmp_dir/install.sh" "${ORIGINAL_ARGS[@]+"${ORIGINAL_ARGS[@]}"}"
   exit $?
 }
 
